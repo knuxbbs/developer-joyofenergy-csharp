@@ -8,30 +8,29 @@ namespace JOIEnergy.Tests
 {
     public class AccountServiceTest
     {
-        private const Supplier PRICE_PLAN_ID = Supplier.PowerForEveryone;
-        private const String SMART_METER_ID = "smart-meter-id";
+        private const Supplier PricePlanId = Supplier.PowerForEveryone;
+        private const string SmartMeterId = "smart-meter-id";
 
-        private AccountService accountService;
+        private readonly AccountService _accountService;
 
         public AccountServiceTest()
         {
-            Dictionary<String, Supplier> smartMeterToPricePlanAccounts = new Dictionary<string, Supplier>();
-            smartMeterToPricePlanAccounts.Add(SMART_METER_ID, PRICE_PLAN_ID);
+            var smartMeterToPricePlanAccounts = new Dictionary<string, Supplier> {{SmartMeterId, PricePlanId}};
 
-            accountService = new AccountService(smartMeterToPricePlanAccounts);
+            _accountService = new AccountService(smartMeterToPricePlanAccounts);
         }
 
         [Fact]
         public void GivenTheSmartMeterIdReturnsThePricePlanId()
         {
-            var result = accountService.GetPricePlanIdForSmartMeterId("smart-meter-id");
-            Assert.Equal(Supplier.PowerForEveryone, result);
+            var result = _accountService.GetPricePlanIdForSmartMeterId(SmartMeterId);
+            Assert.Equal(PricePlanId, result);
         }
 
         [Fact]
         public void GivenAnUnknownSmartMeterIdReturnsANullSupplier()
         {
-            var result = accountService.GetPricePlanIdForSmartMeterId("bob-carolgees");
+            var result = _accountService.GetPricePlanIdForSmartMeterId("bob-carolgees");
             Assert.Equal(Supplier.NullSupplier, result);
         }
     }

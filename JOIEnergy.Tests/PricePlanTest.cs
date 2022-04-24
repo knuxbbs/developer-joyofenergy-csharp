@@ -17,11 +17,13 @@ namespace JOIEnergy.Tests
                 EnergySupplier = Supplier.TheGreenEco,
                 UnitRate = 20m,
                 PeakTimeMultiplier = new List<PeakTimeMultiplier> {
-                    new PeakTimeMultiplier { 
+                    new()
+                    { 
                         DayOfWeek = DayOfWeek.Saturday,
                         Multiplier = 2m
                     },
-                    new PeakTimeMultiplier {
+                    new()
+                    {
                         DayOfWeek = DayOfWeek.Sunday,
                         Multiplier = 10m
                     }

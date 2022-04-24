@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using JOIEnergy.Domain;
+using JOIEnergy.Dtos;
 using JOIEnergy.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,28 +19,33 @@ namespace JOIEnergy.Controllers
         {
             _meterReadingService = meterReadingService;
         }
+        
         // POST api/values
         [HttpPost ("store")]
-        public ObjectResult Post([FromBody]MeterReadings meterReadings)
+        public IActionResult Post([FromBody] MeterReadingsDto dto)
         {
-            if (!IsMeterReadingsValid(meterReadings)) {
-                return new BadRequestObjectResult("Internal Server Error");
+            if (!IsMeterReadingsValid(dto))
+            {
+                return BadRequest("Internal Server Error");
             }
-            _meterReadingService.StoreReadings(meterReadings.SmartMeterId,meterReadings.ElectricityReadings);
-            return new OkObjectResult("{}");
+
+            _meterReadingService.StoreReadings(dto.SmartMeterId, dto.ElectricityReadings);
+
+            return Ok();
         }
 
-        private bool IsMeterReadingsValid(MeterReadings meterReadings)
+        private bool IsMeterReadingsValid(MeterReadingsDto dto)
         {
-            String smartMeterId = meterReadings.SmartMeterId;
-            List<ElectricityReading> electricityReadings = meterReadings.ElectricityReadings;
+            String smartMeterId = dto.SmartMeterId;
+            List<ElectricityReading> electricityReadings = dto.ElectricityReadings;
+            
             return smartMeterId != null && smartMeterId.Any()
                     && electricityReadings != null && electricityReadings.Any();
         }
 
         [HttpGet("read/{smartMeterId}")]
-        public ObjectResult GetReading(string smartMeterId) {
-            return new OkObjectResult(_meterReadingService.GetReadings(smartMeterId));
+        public ActionResult<List<ElectricityReading>> GetReading(string smartMeterId) {
+            return Ok(_meterReadingService.GetElectricityReadings(smartMeterId));
         }
     }
 }

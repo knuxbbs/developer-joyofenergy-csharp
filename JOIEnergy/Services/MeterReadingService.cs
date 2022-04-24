@@ -1,30 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using JOIEnergy.Domain;
 
 namespace JOIEnergy.Services
 {
     public class MeterReadingService : IMeterReadingService
     {
-        public Dictionary<string, List<ElectricityReading>> MeterAssociatedReadings { get; set; }
+        private readonly Dictionary<string, List<ElectricityReading>> _meterAssociatedReadings;
+        
         public MeterReadingService(Dictionary<string, List<ElectricityReading>> meterAssociatedReadings)
         {
-            MeterAssociatedReadings = meterAssociatedReadings;
+            _meterAssociatedReadings = meterAssociatedReadings;
         }
 
-        public List<ElectricityReading> GetReadings(string smartMeterId) {
-            if (MeterAssociatedReadings.ContainsKey(smartMeterId)) {
-                return MeterAssociatedReadings[smartMeterId];
-            }
-            return new List<ElectricityReading>();
+        public List<ElectricityReading> GetElectricityReadings(string smartMeterId)
+        {
+            return _meterAssociatedReadings.ContainsKey(smartMeterId)
+                ? _meterAssociatedReadings[smartMeterId]
+                : new List<ElectricityReading>();
         }
 
         public void StoreReadings(string smartMeterId, List<ElectricityReading> electricityReadings) {
-            if (!MeterAssociatedReadings.ContainsKey(smartMeterId)) {
-                MeterAssociatedReadings.Add(smartMeterId, new List<ElectricityReading>());
+            if (!_meterAssociatedReadings.ContainsKey(smartMeterId)) {
+                _meterAssociatedReadings.Add(smartMeterId, new List<ElectricityReading>());
             }
 
-            electricityReadings.ForEach(electricityReading => MeterAssociatedReadings[smartMeterId].Add(electricityReading));
+            electricityReadings.ForEach(electricityReading => _meterAssociatedReadings[smartMeterId].Add(electricityReading));
         }
     }
 }

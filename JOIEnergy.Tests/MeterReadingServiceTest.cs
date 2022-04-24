@@ -8,33 +8,35 @@ namespace JOIEnergy.Tests
 {
     public class MeterReadingServiceTest
     {
-        private static string SMART_METER_ID = "smart-meter-id";
+        private const string SmartMeterId = "smart-meter-id";
 
-        private MeterReadingService meterReadingService;
+        private readonly MeterReadingService _meterReadingService;
 
         public MeterReadingServiceTest()
         {
-            meterReadingService = new MeterReadingService(new Dictionary<string, List<ElectricityReading>>());
+            _meterReadingService = new MeterReadingService(new Dictionary<string, List<ElectricityReading>>());
 
-            meterReadingService.StoreReadings(SMART_METER_ID, new List<ElectricityReading>() {
-                new ElectricityReading() { Time = DateTime.Now.AddMinutes(-30), Reading = 35m },
-                new ElectricityReading() { Time = DateTime.Now.AddMinutes(-15), Reading = 30m }
+            _meterReadingService.StoreReadings(SmartMeterId, new List<ElectricityReading>
+            {
+                new(DateTime.Now.AddMinutes(-30), 35m),
+                new(DateTime.Now.AddMinutes(-15), 30m)
             });
         }
 
         [Fact]
         public void GivenMeterIdThatDoesNotExistShouldReturnNull() {
-            Assert.Empty(meterReadingService.GetReadings("unknown-id"));
+            Assert.Empty(_meterReadingService.GetElectricityReadings("unknown-id"));
         }
 
         [Fact]
         public void GivenMeterReadingThatExistsShouldReturnMeterReadings()
         {
-            meterReadingService.StoreReadings(SMART_METER_ID, new List<ElectricityReading>() {
-                new ElectricityReading() { Time = DateTime.Now, Reading = 25m }
+            _meterReadingService.StoreReadings(SmartMeterId, new List<ElectricityReading>
+            {
+                new(DateTime.Now, 25m)
             });
 
-            var electricityReadings = meterReadingService.GetReadings(SMART_METER_ID);
+            var electricityReadings = _meterReadingService.GetElectricityReadings(SmartMeterId);
 
             Assert.Equal(3, electricityReadings.Count);
         }

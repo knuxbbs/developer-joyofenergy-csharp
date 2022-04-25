@@ -5,7 +5,8 @@ namespace JOIEnergy.Services
 {
     public interface IMeterReadingService
     {
-        List<ElectricityReading> GetElectricityReadings(string smartMeterId);
+        List<ElectricityReading> GetReadings(string smartMeterId);
+        List<ElectricityReading> GetLastWeekReadings(string smartMeterId);
         void StoreReadings(string smartMeterId, List<ElectricityReading> electricityReadings);
     }
 }

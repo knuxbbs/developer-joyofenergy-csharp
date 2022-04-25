@@ -36,6 +36,11 @@ namespace JOIEnergy.Controllers
 
         private bool IsMeterReadingsValid(MeterReadingsDto dto)
         {
+            if (dto == null)
+            {
+                return false;
+            }
+            
             String smartMeterId = dto.SmartMeterId;
             List<ElectricityReading> electricityReadings = dto.ElectricityReadings;
             
@@ -45,7 +50,12 @@ namespace JOIEnergy.Controllers
 
         [HttpGet("read/{smartMeterId}")]
         public ActionResult<List<ElectricityReading>> GetReading(string smartMeterId) {
-            return Ok(_meterReadingService.GetElectricityReadings(smartMeterId));
+            return Ok(_meterReadingService.GetReadings(smartMeterId));
+        }
+        
+        [HttpGet("read/{smartMeterId}/last-week")]
+        public ActionResult<List<ElectricityReading>> GetLastWeekReading(string smartMeterId) {
+            return Ok(_meterReadingService.GetLastWeekReadings(smartMeterId));
         }
     }
 }

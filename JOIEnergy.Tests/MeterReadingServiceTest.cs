@@ -25,7 +25,7 @@ namespace JOIEnergy.Tests
 
         [Fact]
         public void GivenMeterIdThatDoesNotExistShouldReturnNull() {
-            Assert.Empty(_meterReadingService.GetElectricityReadings("unknown-id"));
+            Assert.Empty(_meterReadingService.GetReadings("unknown-id"));
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace JOIEnergy.Tests
                 new(DateTime.Now, 25m)
             });
 
-            var electricityReadings = _meterReadingService.GetElectricityReadings(SmartMeterId);
+            var electricityReadings = _meterReadingService.GetReadings(SmartMeterId);
 
             Assert.Equal(3, electricityReadings.Count);
         }

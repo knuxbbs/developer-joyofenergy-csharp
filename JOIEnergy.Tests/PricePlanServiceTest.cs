@@ -18,8 +18,12 @@ namespace JOIEnergy.Tests
             _mockMeterReadingService = new Mock<MeterReadingService>();
             _pricePlanService = new PricePlanService(_pricePlans, _mockMeterReadingService.Object);
 
-            _mockMeterReadingService.Setup(service => service.GetReadings(It.IsAny<string>())).Returns(new List<ElectricityReading>(){new ElectricityReading(),
-                new ElectricityReading()});
+            _mockMeterReadingService.Setup(service => service.GetReadings(It.IsAny<string>())).Returns(
+                new List<ElectricityReading>()
+                {
+                    new(DateTime.Now.AddHours(-1), 15.0m),
+                    new(DateTime.Now, 5.0m)
+                });
         }
     }
 }
